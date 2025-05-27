@@ -14,8 +14,8 @@ Anyone can anonymously report what life is *really* like at their university in 
 
 ## 📊 已有数据 / Data
 
-所有数据会被收集到 `/data` 文件夹中，结构化为 JSON，供开发者和研究者使用。
-我们也将会进行数据整理并将整理结果上传至仓库（代办），达成真正的参考价值
+- 所有数据会被收集，结构化为 JSON并定期上传到仓库中，供开发者和研究者使用。
+- 我们也将会进行数据整理并将整理结果上传至仓库（待办），以达成真正有参考价值
 
 ## ⚠️ 免责声明 / Disclaimer
 
