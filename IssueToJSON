@@ -1,0 +1,52 @@
+import re
+import json
+
+def parse_issue_text(text):
+    result = {
+        "school": "",
+        "morning_class": "",
+        "night_class": "",
+        "running": "",
+        "dorm_check_freq": "",
+        "dorm_lock_time": "",
+        "freedom_comment": "",
+        "other_comment": ""
+    }
+
+    sections = {
+        "是否有早自习": "morning_class",
+        "是否有晚自习": "night_class",
+        "是否有校园跑打卡制度": "running",
+        "查寝频率": "dorm_check_freq",
+        "封寝时间": "dorm_lock_time",
+    }
+
+    # 正则提取
+    school_match = re.search(r"## 学校名称\s*(.+?)\s*(?:##|$)", text, re.DOTALL)
+    if school_match:
+        result["school"] = school_match.group(1).strip()
+
+    for section_title, key in sections.items():
+        pattern = r"{0}.*?- \[(1)?\] (.+?)\s*(?:\n|$)".format(re.escape(section_title))
+        matches = re.findall(pattern, text)
+        for m in matches:
+            if m[0] == "1":
+                result[key] = m[1].strip()
+                break
+
+    freedom = re.search(r"## 校园自由度（主观评价）\s*(.*?)\s*(?:##|$)", text, re.DOTALL)
+    if freedom:
+        result["freedom_comment"] = freedom.group(1).strip()
+
+    other = re.search(r"## 其他备注 / 建议\s*(.*?)\s*(?:---|$)", text, re.DOTALL)
+    if other:
+        result["other_comment"] = other.group(1).strip()
+
+    return result
+
+if __name__ == "__main__":
+    with open("example_issue.md", "r", encoding="utf-8") as f:
+        issue_text = f.read()
+    
+    parsed = parse_issue_text(issue_text)
+    print(json.dumps(parsed, ensure_ascii=False, indent=2))
